@@ -1,0 +1,196 @@
+const createBrandNameTag = (tag, content, addClass) => {
+	let tagName = document.createElement(tag);
+	let tagContent = document.createTextNode(content);
+
+	tagName.appendChild(tagContent);
+	tagName.classList.add(addClass);
+
+	return tagName;
+};
+
+const checkTrailingZeros = (num) => {
+	return num.includes(".00") ? num.split(".00")[0] : num;
+};
+
+const deleteEuroSign = (num) => {
+	return num.includes("€") ? num.split("€")[1] : num;
+};
+
+const createPrice = (tag, price, addClass) => {
+	let tagPriceName = document.createElement(tag);
+	let tagPriceContent;
+	price.includes("€")
+		? (tagPriceContent = document.createTextNode(checkTrailingZeros(price)))
+		: (tagPriceContent = document.createTextNode(
+				"€" + checkTrailingZeros(price)
+		  ));
+
+	tagPriceName.appendChild(tagPriceContent);
+	tagPriceName.classList.add(addClass);
+
+	return tagPriceName;
+};
+
+const createSlide = (imageUrl, name, brand, price, listPrice, addClass) => {
+	let slide = document.createElement("div");
+	let slideImage = document.createElement("img");
+	slideImage.src = imageUrl;
+	slideImage.classList.add(addClass);
+	slide.appendChild(slideImage);
+
+	let brandTag = createBrandNameTag("p", brand, "slides-brand");
+
+	let nameTag = createBrandNameTag("p", name, "slides-name");
+
+	let priceTag = createPrice("p", price, "slides-price");
+
+	slideImage.after(brandTag);
+	brandTag.after(nameTag);
+	nameTag.after(priceTag);
+
+	if (addClass === "first-slide") {
+		let mostViewedTag = document.createElement("p");
+		let mostViewedContent = document.createTextNode("most viewed!");
+
+		mostViewedTag.appendChild(mostViewedContent);
+		mostViewedTag.classList.add("most-viewed-caption");
+		slideImage.before(mostViewedTag);
+	}
+
+	if (
+		checkTrailingZeros(deleteEuroSign(price)) !==
+		checkTrailingZeros(deleteEuroSign(listPrice))
+	) {
+		let tagPriceListName = document.createElement("p");
+		let tagPriceListContent;
+
+		if (listPrice.includes("€")) {
+			tagPriceListContent = document.createTextNode(
+				checkTrailingZeros(listPrice)
+			);
+		} else {
+			tagPriceListContent = document.createTextNode(
+				"€" + checkTrailingZeros(listPrice)
+			);
+		}
+		tagPriceListName.appendChild(tagPriceListContent);
+		tagPriceListName.classList.add("strike-price");
+		priceTag.setAttribute("id", "slides-bestPrice");
+		priceTag.classList.remove("slides-price");
+
+		let priceContainer = document.createElement("div");
+		priceContainer.classList.add("price-container");
+
+		priceContainer.appendChild(priceTag);
+		priceContainer.appendChild(tagPriceListName);
+		nameTag.after(priceContainer);
+	}
+
+	return slide;
+};
+
+const groupFileObj = (obj) => {
+	let mostSold;
+	let mostViewed;
+	let carouselObj;
+
+	for (let values of Object.values(obj)) {
+		let groupedSoldValues = [];
+		let groupedViewedValues = [];
+
+		values.forEach((item) => {
+			const { soldThisWeek, viewThisWeek, ...rest } = item;
+
+			groupedSoldValues.push(soldThisWeek);
+			groupedViewedValues.push(viewThisWeek);
+
+			if (groupedSoldValues.reduce((a, b) => Math.max(a, b)) === soldThisWeek) {
+				mostSold = {
+					...rest,
+					soldThisWeek,
+					viewThisWeek,
+				};
+			}
+
+			if (
+				groupedViewedValues.reduce((a, b) => Math.max(a, b)) === viewThisWeek
+			) {
+				mostViewed = {
+					...rest,
+					soldThisWeek,
+					viewThisWeek,
+				};
+			}
+		});
+
+		carouselObj = values
+			.filter(
+				(item) =>
+					item.soldThisWeek !== mostSold.soldThisWeek &&
+					item.viewThisWeek !== mostViewed.viewThisWeek
+			)
+			.sort((a, b) => b.viewThisWeek - a.viewThisWeek);
+	}
+
+	$(".best-seller-link").attr("href", `${mostSold.url}`),
+		$(".best-seller-pic").attr({
+			src: `${mostSold.imageUrl}/>`,
+			alt: `${mostSold.name}`,
+		});
+
+	let firstSlide = createSlide(
+		`${mostViewed.imageUrl}`,
+		`${mostViewed.name}`,
+		`${mostViewed.brand}`,
+		`${mostViewed.price}`,
+		`${mostViewed.listPrice}`,
+		"first-slide"
+	);
+
+	document.getElementById("slides").appendChild(firstSlide);
+
+	carouselObj.map((item) => {
+		let newSlide = createSlide(
+			`${item.imageUrl}`,
+			`${item.name}`,
+			`${item.brand}`,
+			`${item.price}`,
+			`${item.listPrice}`,
+			"slides-pic"
+		);
+
+		document.getElementById("slides").appendChild(newSlide);
+	});
+};
+
+$("document").ready(() => {
+	$.ajax({
+		method: "GET",
+		url: "https://nosto-campaign-assets.s3.amazonaws.com/test-task/testtask-products.json",
+		dataType: "json",
+	})
+		.done((file) => {
+			groupFileObj(file);
+			$("#slides").slick({
+				infinite: true,
+				slidesToShow: 3,
+				slidesToScroll: 1,
+				variableWidth: true,
+				draggable: false,
+				responsive: [
+					{
+						breakpoint: 955,
+						settings: {
+							slidesToShow: 2,
+							slidesToScroll: 1,
+							arrows: false,
+							draggable: true,
+						},
+					},
+				],
+			});
+		})
+		.fail(() => {
+			alert("error");
+		});
+});

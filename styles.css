@@ -1,0 +1,220 @@
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500&display=swap");
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	font-family: "Inconsolata", monospace;
+}
+
+body {
+	display: grid;
+	grid-template-rows: repeat(3, 1fr);
+	grid-template-columns: repeat(4, 1fr);
+	height: 100vh;
+}
+
+.main-container {
+	grid-column: 1/-1;
+	grid-row: 2;
+	margin: 2rem;
+	background: #dddddd;
+	display: grid;
+	grid-template-areas: "main slide slide slide";
+	align-items: center;
+	justify-items: center;
+}
+
+.best-seller-container {
+	grid-area: main;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.best-seller-container > .best-seller {
+	margin: 2rem;
+}
+
+.best-seller-caption {
+	background-color: red;
+	color: white;
+	text-transform: uppercase;
+	padding: 0.5rem;
+	font-weight: 600;
+}
+
+.best-seller-pic {
+	object-fit: cover;
+	width: 250px;
+	height: 250px;
+	margin-bottom: 2rem;
+}
+
+.slide-container {
+	grid-area: slide;
+	width: 550px;
+	height: 250px;
+}
+
+.other-products-caption {
+	color: black;
+	text-transform: uppercase;
+	margin-bottom: 1rem;
+	font-weight: bolder;
+	font-size: 1.7rem;
+	text-align: center;
+}
+
+.slides {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.most-viewed-caption {
+	background-color: #ffca00;
+	color: black;
+	text-transform: uppercase;
+	padding: 0.2rem;
+	font-size: 0.9rem;
+	font-weight: 600;
+	position: absolute;
+	top: 0.3rem;
+	left: 38rem;
+}
+
+.slides-pic,
+.first-slide {
+	object-fit: contain;
+	width: 170px;
+	height: 170px;
+}
+
+.slides-brand {
+	text-transform: uppercase;
+	font-weight: bold;
+	text-align: center;
+	margin-top: 1rem;
+	font-size: 1.1rem;
+}
+
+.slides-name {
+	text-align: center;
+	margin-top: 0.3rem;
+	white-space: nowrap;
+	width: 100%;
+	overflow: hidden;
+}
+
+.slides-price {
+	text-align: center;
+	margin-top: 0.5rem;
+	font-size: 1.5rem;
+	font-weight: bolder;
+}
+
+#slides-bestPrice {
+	color: red;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.price-container {
+	display: flex;
+	justify-content: space-evenly;
+	margin-top: 0.5rem;
+}
+
+.strike-price {
+	text-decoration: line-through;
+	color: #6f6f6d;
+	font-style: italic;
+	font-size: 1.5rem;
+}
+
+.slick-slide {
+	width: 170px;
+	height: 170px;
+	margin: 0 0.5rem;
+}
+
+.slick-container {
+	height: 170px;
+}
+
+.slick-slider {
+	height: 170px;
+}
+
+@media only screen and (max-width: 955px) {
+	body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.main-container {
+		display: block;
+		height: 600px;
+	}
+
+	.best-seller-container > .best-seller {
+		margin: 1rem;
+	}
+
+	.best-seller-caption {
+		font-size: 1.2rem;
+	}
+
+	.best-seller-pic {
+		width: 200px;
+		height: 200px;
+	}
+
+	.slide-container {
+		width: 450px;
+		height: 450px;
+		padding: 0 1rem;
+	}
+
+	.other-products-caption {
+		font-size: 1.2rem;
+	}
+
+	.slides-pic,
+	.first-slide {
+		width: 150px;
+		height: 150px;
+	}
+
+	.slick-slide {
+		width: 150px;
+		height: 150px;
+		margin: 0 0.5rem;
+	}
+
+	.slick-container {
+		height: 150px;
+	}
+
+	.slick-slider {
+		height: 150px;
+	}
+
+	.slides-brand,
+	.slides-name {
+		font-size: 0.9rem;
+	}
+
+	.slides-price,
+	#slides-bestPrice,
+	.strike-price {
+		font-size: 1.2rem;
+	}
+
+	.most-viewed-caption {
+		left: 23rem;
+	}
+}
