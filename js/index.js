@@ -1,13 +1,3 @@
-const createBrandNameTag = (tag, content, addClass) => {
-	let tagName = document.createElement(tag);
-	let tagContent = document.createTextNode(content);
-
-	tagName.appendChild(tagContent);
-	tagName.classList.add(addClass);
-
-	return tagName;
-};
-
 const checkTrailingZeros = (num) => {
 	return num.includes(".00") ? num.split(".00")[0] : num;
 };
@@ -16,19 +6,22 @@ const deleteEuroSign = (num) => {
 	return num.includes("€") ? num.split("€")[1] : num;
 };
 
-const createPrice = (tag, price, addClass) => {
-	let tagPriceName = document.createElement(tag);
-	let tagPriceContent;
-	price.includes("€")
-		? (tagPriceContent = document.createTextNode(checkTrailingZeros(price)))
-		: (tagPriceContent = document.createTextNode(
-				"€" + checkTrailingZeros(price)
-		  ));
+const createTag = (tag, content, addClass) => {
+	let tagName = document.createElement(tag);
+	let tagContent = document.createTextNode(content);
 
-	tagPriceName.appendChild(tagPriceContent);
-	tagPriceName.classList.add(addClass);
+	if (addClass === "slides-price") {
+		content.includes("€")
+			? (tagContent = document.createTextNode(checkTrailingZeros(content)))
+			: (tagContent = document.createTextNode(
+					"€" + checkTrailingZeros(content)
+			  ));
+	}
 
-	return tagPriceName;
+	tagName.appendChild(tagContent);
+	tagName.classList.add(addClass);
+
+	return tagName;
 };
 
 const createSlide = (imageUrl, name, brand, price, listPrice, addClass) => {
@@ -38,11 +31,11 @@ const createSlide = (imageUrl, name, brand, price, listPrice, addClass) => {
 	slideImage.classList.add(addClass);
 	slide.appendChild(slideImage);
 
-	let brandTag = createBrandNameTag("p", brand, "slides-brand");
+	let brandTag = createTag("p", brand, "slides-brand");
 
-	let nameTag = createBrandNameTag("p", name, "slides-name");
+	let nameTag = createTag("p", name, "slides-name");
 
-	let priceTag = createPrice("p", price, "slides-price");
+	let priceTag = createTag("p", price, "slides-price");
 
 	slideImage.after(brandTag);
 	brandTag.after(nameTag);
@@ -174,7 +167,7 @@ $("document").ready(() => {
 			$("#slides").slick({
 				infinite: true,
 				slidesToShow: 3,
-				slidesToScroll: 1,
+				slidesToScroll: 2,
 				variableWidth: true,
 				draggable: false,
 				responsive: [
