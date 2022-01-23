@@ -119,12 +119,13 @@ body {
 	color: red;
 	font-size: 1.5rem;
 	font-weight: bold;
+	margin-top: 0.5rem;
 }
 
 .price-container {
 	display: flex;
 	justify-content: space-evenly;
-	margin-top: 0.5rem;
+	/* margin-top: 0.5rem; */
 }
 
 .strike-price {

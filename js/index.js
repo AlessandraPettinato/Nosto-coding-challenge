@@ -42,11 +42,7 @@ const createSlide = (imageUrl, name, brand, price, listPrice, addClass) => {
 	nameTag.after(priceTag);
 
 	if (addClass === "first-slide") {
-		let mostViewedTag = document.createElement("p");
-		let mostViewedContent = document.createTextNode("most viewed!");
-
-		mostViewedTag.appendChild(mostViewedContent);
-		mostViewedTag.classList.add("most-viewed-caption");
+		let mostViewedTag = createTag("p", "most viewed!", "most-viewed-caption");
 		slideImage.before(mostViewedTag);
 	}
 
@@ -54,25 +50,16 @@ const createSlide = (imageUrl, name, brand, price, listPrice, addClass) => {
 		checkTrailingZeros(deleteEuroSign(price)) !==
 		checkTrailingZeros(deleteEuroSign(listPrice))
 	) {
-		let tagPriceListName = document.createElement("p");
-		let tagPriceListContent;
-
-		if (listPrice.includes("€")) {
-			tagPriceListContent = document.createTextNode(
-				checkTrailingZeros(listPrice)
-			);
-		} else {
-			tagPriceListContent = document.createTextNode(
-				"€" + checkTrailingZeros(listPrice)
-			);
-		}
-		tagPriceListName.appendChild(tagPriceListContent);
+		let tagPriceListName = createTag(
+			"p",
+			checkTrailingZeros(listPrice),
+			"slides-price"
+		);
 		tagPriceListName.classList.add("strike-price");
 		priceTag.setAttribute("id", "slides-bestPrice");
 		priceTag.classList.remove("slides-price");
 
-		let priceContainer = document.createElement("div");
-		priceContainer.classList.add("price-container");
+		let priceContainer = createTag("div", "", "price-container");
 
 		priceContainer.appendChild(priceTag);
 		priceContainer.appendChild(tagPriceListName);
